@@ -1,0 +1,9 @@
+
+2026-11-03 05:32:05 Loaded main app package C:\Users\Fluxenite\Downloads\reverse\reverse-engineering\_extract\a2\resources\obsidian.asar
+Ignored: Error: ENOENT: no such file or directory, open 'C:\Users\Fluxenite\Downloads\reverse\reverse-engineering\_runtime\userdata\a1b2c3d4e5f60718.json'
+
+DevTools listening on ws://127.0.0.1:9222/devtools/browser/00c1a163-c4f4-4f9a-9f2f-dd837f349b4d
+2026-11-03 05:32:05 Checking for update using Github
+2026-11-03 05:32:06 Success.
+2026-11-03 05:32:06 Latest version is 1.15.0
+2026-11-03 05:32:06 App is up to date.

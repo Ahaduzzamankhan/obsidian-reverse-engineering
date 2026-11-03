@@ -1,0 +1,56 @@
+%% Obsidian Desktop 1.15.0 — storage & data flow
+%% Left: write path (user action -> disk). Right: read path (disk -> index -> UI).
+flowchart LR
+  subgraph USER["User actions"]
+    U1["Type in editor"]
+    U2["Rename / move / delete"]
+    U3["Edit property"]
+    U4["Run command / CLI"]
+  end
+
+  subgraph WRITE["Write path (renderer)"]
+    W1["View state change"]
+    W2["Vault.process()<br/>read-modify-write"]
+    W3["FileManager.renameFile()<br/>link rewriting pass"]
+    W4["Adapter write<br/>(atomic temp + rename)"]
+    W5["Debounced save<br/>workspace.json"]
+  end
+
+  subgraph DISK["Disk"]
+    D1["note.md"]
+    D2["note.md + rewritten inbound links"]
+    D3[".obsidian/workspace.json"]
+    D4[".obsidian/app.json · appearance.json<br/>core-plugins.json · community-plugins.json<br/>graph.json · hotkeys.json · types.json"]
+    D5["&lt;userData&gt;/&lt;vaultId&gt;.json (geometry)"]
+    D6["&lt;userData&gt;/obsidian.json (registry+global)"]
+    D7["IndexedDB: store file + metadata"]
+    D8["IndexedDB: store backups (file recovery)"]
+  end
+
+  subgraph READ["Read / index path"]
+    R1["File watcher<br/>create · modify · delete · rename"]
+    R2["Markdown parser<br/>positions + frontmatter"]
+    R3["CachedMetadata"]
+    R4["Link resolution<br/>path → basename → alias"]
+    R5["resolvedLinks / unresolvedLinks<br/>tag map / property map"]
+    R6["Backlinks · graph · search · Bases<br/>outline · properties · switcher"]
+    R7["Editor / Reading view render"]
+  end
+
+  U1 --> W1 --> W2 --> W4 --> D1
+  U2 --> W3 --> D2
+  U3 --> W2
+  U4 --> W2
+  W2 -.-> D4
+  W5 --> D3
+  U1 -.resize/move.-> D5
+  U2 -.registry change.-> D6
+  D1 --> R1 --> R2 --> R3
+  R3 --> D7
+  R3 --> R4 --> R5 --> R6
+  R3 --> R7
+  R5 --> R6
+  D7 --> R3
+  R3 --> D8
+  R2 -. frontmatter types .-> D4
+  D6 --> R1

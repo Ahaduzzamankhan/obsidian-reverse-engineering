@@ -1,0 +1,12 @@
+filters:
+  and:
+    - file.hasTag("project")
+views:
+  - type: table
+    name: Projects
+    order:
+      - file.name
+      - status
+      - priority
+  - type: cards
+    name: Cards

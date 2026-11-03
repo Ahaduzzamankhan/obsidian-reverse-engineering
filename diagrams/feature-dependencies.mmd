@@ -1,0 +1,79 @@
+%% Obsidian Desktop — feature dependency graph (what must exist before what)
+flowchart BT
+  subgraph P0["P0 — foundation"]
+    F1["Vault &amp; adapter<br/>read/write/watch/rename"]
+    F2["Markdown parser<br/>positions + frontmatter"]
+    F3["Metadata cache<br/>links · tags · headings · blocks · sections"]
+    F4["Workspace tree<br/>tabs · splits · persistence"]
+    F5["Command registry<br/>+ hotkeys"]
+    F6["Editor (CodeMirror 6)<br/>source + reading view"]
+    F7["Link resolution<br/>+ backlinks"]
+    F8["File explorer"]
+    F9["Search (text + operators)"]
+    F10["Settings framework<br/>+ config files"]
+  end
+
+  subgraph P1["P1 — knowledge features"]
+    G1["Wikilinks, embeds, block refs"]
+    G2["Properties UI + type inference"]
+    G3["Templates &amp; daily notes"]
+    G4["Outline · tags pane · properties pane"]
+    G5["Bookmarks"]
+    G6["File recovery / local history"]
+    G7["Attachments: images, PDF, media"]
+    G8["Quick switcher · command palette"]
+    G9["Plugin host + API surface"]
+    G10["Bases: table + filters"]
+    G11["Canvas"]
+    G12["Graph view"]
+  end
+
+  subgraph P2["P2 — power features"]
+    H1["Bases: cards/list/kanban, formulas"]
+    H2["Canvas: edges, groups, link cards, export"]
+    H3["Local graph, graph groups/forces"]
+    H4["File recovery diff + restore"]
+    H5["CLI + scripting surface"]
+    H6["Multi-window / popouts"]
+    H7["Themes + CSS snippets marketplace"]
+    H8["Slides, audio recorder, workspaces plugin"]
+  end
+
+  subgraph P3["P3 — optional / proprietary"]
+    I1["Sync"]
+    I2["Publish"]
+    I3["Enterprise managed policy"]
+    I4["Mobile clients"]
+  end
+
+  F1 --> F2 --> F3 --> F7
+  F1 --> F8
+  F3 --> F9
+  F2 --> F6
+  F4 --> F6
+  F5 --> F6
+  F7 --> G1
+  F3 --> G1
+  F3 --> G2
+  F2 --> G2
+  F3 --> G3
+  F3 --> G4
+  F3 --> G6
+  F1 --> G7
+  F5 --> G8
+  F5 --> G9
+  F3 --> G10
+  F1 --> G11
+  F3 --> G12
+  G10 --> H1
+  G11 --> H2
+  G12 --> H3
+  G6 --> H4
+  F5 --> H5
+  F4 --> H6
+  F10 --> H7
+  G9 --> H8
+  G9 --> I1
+  G9 --> I2
+  F10 --> I3
+  F4 --> I4

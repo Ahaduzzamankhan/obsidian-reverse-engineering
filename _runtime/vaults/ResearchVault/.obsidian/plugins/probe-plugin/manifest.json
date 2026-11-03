@@ -1,0 +1,9 @@
+{
+  "id": "probe-plugin",
+  "name": "Probe Plugin",
+  "version": "1.0.0",
+  "minAppVersion": "1.4.0",
+  "description": "Local test plugin used by the reverse-engineering investigation.",
+  "author": "investigation",
+  "isDesktopOnly": false
+}

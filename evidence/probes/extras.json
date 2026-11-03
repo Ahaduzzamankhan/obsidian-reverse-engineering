@@ -1,0 +1,1 @@
+{"cli":true,"secretStorage":["_","app","secrets","secretsMeta","saveMeta","adapter"],"embedRegistry":["md","bmp","png","jpg","jpeg","gif","svg","webp","avif","mp3","wav","m4a","3gp","flac","ogg","oga","opus","mp4","webm","ogv","mov","mkv","pdf","canvas","base"],"foldManager":true,"shareReceiver":true,"renderContext":true}

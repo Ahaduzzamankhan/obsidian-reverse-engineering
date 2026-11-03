@@ -1,0 +1,77 @@
+%% Obsidian Desktop 1.15.0 — process and layer architecture (verified)
+flowchart TB
+  subgraph OS["Operating system"]
+    FS["Vault folder<br/>notes .md, attachments, .obsidian/"]
+    UD["userData<br/>obsidian.json, &lt;vaultId&gt;.json, IndexedDB, Partitions/"]
+    TRASH["OS trash"]
+    BROWSER["Default browser / OS handlers"]
+  end
+
+  subgraph MAIN["Electron main process — obsidian.asar/main.js"]
+    BOOT["app.asar bootstrap<br/>privileged scheme 'app'<br/>@electron/remote init"]
+    WIN["Window manager<br/>BrowserWindow per vault<br/>geometry &lt;vaultId&gt;.json"]
+    PROTO["app:// protocol handler<br/>app://obsidian.md/ (resources)<br/>app://&lt;36-hex&gt;/ (vault files)"]
+    IPC["44 ipcMain channels<br/>+ register-cli"]
+    MENU["Native menus<br/>set-menu / update-menu-items / render-menu"]
+    UPD["Updater<br/>GitHub + insider channel<br/>copy-asar staging"]
+    CLISRV["CLI server<br/>Windows named pipe obsidian-cli-&lt;user&gt;<br/>Unix ~/.obsidian-cli.sock"]
+    POLICY["Managed policy<br/>policy.json (schemaVersion 1)"]
+    WEBVIEW["Web viewer sessions<br/>partition per vault, EasyList,<br/>clipboard-only permissions"]
+  end
+
+  subgraph RENDER["Renderer — app://obsidian.md/index.html (nodeIntegration: true, contextIsolation: false)"]
+    APP["App service locator"]
+    VAULT["Vault + DataAdapter<br/>(original-fs)"]
+    WS["Workspace tree<br/>split · tabs · leaf"]
+    CMD["Command registry (204)"]
+    META["MetadataCache<br/>links · tags · headings · blocks · sections"]
+    EDIT["Editor (CodeMirror 6)<br/>Live Preview + Reading view"]
+    SEARCH["Search (global-search)"]
+    GRAPH["Graph (PIXI + worker)"]
+    CANVAS["Canvas (JSON Canvas 1.0)"]
+    BASES["Bases (.base YAML → query engine)"]
+    HOST["Plugin host<br/>30 core + community<br/>require('obsidian') shim"]
+    CSS["Theme engine<br/>1027 CSS custom properties"]
+  end
+
+  subgraph EXT["Extensions"]
+    CORE["Core plugins (built-in)"]
+    COMMUNITY[".obsidian/plugins/&lt;id&gt;/{manifest.json, main.js, styles.css, data.json}"]
+    THEMES[".obsidian/themes/&lt;name&gt;/{manifest.json, theme.css}"]
+    SNIPPETS[".obsidian/snippets/*.css"]
+  end
+
+  BOOT --> WIN
+  WIN --> PROTO
+  WIN --> IPC
+  IPC --> MENU
+  IPC --> UPD
+  IPC --> CLISRV
+  IPC --> WEBVIEW
+  POLICY --> WIN
+  POLICY --> HOST
+  PROTO -->|serves JS/CSS| RENDER
+  IPC <-->|sendSync / executeJavaScript| RENDER
+  UD --- UPD
+  UD --- CLISRV
+  VAULT <-->|read/write/watch| FS
+  IPC --> TRASH
+  IPC --> BROWSER
+  META --- VAULT
+  META --- WS
+  EDIT --- META
+  SEARCH --- META
+  GRAPH --- META
+  BASES --- META
+  HOST --- CMD
+  HOST --- WS
+  HOST --- EDIT
+  CORE --- HOST
+  COMMUNITY --- HOST
+  THEMES --- CSS
+  SNIPPETS --- CSS
+  RENDER --- UD
+  APP --- VAULT
+  APP --- WS
+  APP --- CMD
+  CSS --- APP

@@ -1,0 +1,1 @@
+{"types":["aliases","checkbox","date","datetime","file","folder","multitext","property","number","tags","text"],"props":{"aliases":{"name":"aliases","widget":"aliases"},"cssclasses":{"name":"cssclasses","widget":"multitext"},"tags":{"name":"tags","widget":"tags"}}}

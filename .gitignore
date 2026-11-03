@@ -1,0 +1,12 @@
+# Extracted proprietary application code — kept locally for analysis, never redistributed.
+_extract/
+
+# Disposable runtime state (regenerable; see evidence/extract-manifest.txt)
+_runtime/userdata/
+
+# Any stray tooling caches
+node_modules/
+package-lock.json
+*.err
+.DS_Store
+Thumbs.db
